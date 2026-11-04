@@ -63,4 +63,8 @@ public class Reserva {
     public float getCostoGestion(){
         return costoGestion;
     }
+
+    public float getCostoServicios(){
+        return (float) this.getItems().stream().mapToDouble(item -> item.getPrecioBase()).sum();
+    }
 }
