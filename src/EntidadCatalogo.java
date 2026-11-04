@@ -4,6 +4,9 @@ public interface EntidadCatalogo {
 
     public String getDescripcion();
 
-    public double getPrecioBase();
+    public float getPrecioBase();
 
+    public void reservarCupo();
+
+    public void devolverCupo();
 }
