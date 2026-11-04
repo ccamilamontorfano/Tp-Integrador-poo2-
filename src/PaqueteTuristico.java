@@ -51,4 +51,12 @@ public class PaqueteTuristico implements EntidadCatalogo {
         items.remove(item);
     }
 
+    public void reservarCupo(){
+        this.getItems().forEach(item -> item.reservarCupo());
+    }
+
+    public void devolverCupo() {
+        this.getItems().forEach(item -> item.devolverCupo());
+    }
+
 }
