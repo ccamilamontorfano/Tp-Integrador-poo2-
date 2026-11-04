@@ -4,10 +4,10 @@ import java.util.List;
 public class PaqueteTuristico implements EntidadCatalogo {
     private String nombre;
     private String descripcion;
-    private double descuento;
+    private float descuento;
     private List<EntidadCatalogo> items = new ArrayList<>();
 
-    public PaqueteTuristico(String nombre,String descripcion,double descuento,List<EntidadCatalogo> items){
+    public PaqueteTuristico(String nombre,String descripcion,float descuento,List<EntidadCatalogo> items){
         this.nombre=nombre;
         this.descripcion=descripcion;
         this.descuento =descuento;
@@ -22,8 +22,8 @@ public class PaqueteTuristico implements EntidadCatalogo {
         return descripcion;
     }
 
-    public double getPrecioBase() {
-        double precioBase =0;
+    public float getPrecioBase() {
+        float precioBase =0;
         for(EntidadCatalogo item : items){
             precioBase+=item.getPrecioBase();
         }

@@ -8,12 +8,12 @@ public class ServicioIndividual implements EntidadCatalogo{
     private String nombre;
     private String proveedor;
     private Categoria categoria;
-    private double precioBase;
+    private float precioBase;
     private String descripcion;
     private List<AtributoDinamico> atributos;
     private int cupo;
 
-    public ServicioIndividual(String nombre,String proveedor,Categoria categoria,double precioBase,String descripcion, int cupo){
+    public ServicioIndividual(String nombre,String proveedor,Categoria categoria,float precioBase,String descripcion, int cupo){
         ultimoCodigo++;
         this.codigoReserva = ultimoCodigo;
         this.nombre = nombre;
@@ -33,7 +33,7 @@ public class ServicioIndividual implements EntidadCatalogo{
         return descripcion;
     }
 
-    public double getPrecioBase() {
+    public float getPrecioBase() {
         return precioBase;
     }
 
