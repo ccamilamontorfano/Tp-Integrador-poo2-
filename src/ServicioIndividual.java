@@ -8,11 +8,12 @@ public class ServicioIndividual implements EntidadCatalogo{
     private String nombre;
     private String proveedor;
     private Categoria categoria;
-    private double precioBase;
+    private float precioBase;
     private String descripcion;
     private List<AtributoDinamico> atributos;
+    private int cupo;
 
-    public ServicioIndividual(String nombre,String proveedor,Categoria categoria,double precioBase,String descripcion){
+    public ServicioIndividual(String nombre,String proveedor,Categoria categoria,float precioBase,String descripcion, int cupo){
         ultimoCodigo++;
         this.codigoReserva = ultimoCodigo;
         this.nombre = nombre;
@@ -21,6 +22,7 @@ public class ServicioIndividual implements EntidadCatalogo{
         this.precioBase = precioBase;
         this.descripcion = descripcion;
         this.atributos = new ArrayList<>();
+        this.cupo = cupo;
     }
 
     public String getNombre() {
@@ -31,7 +33,7 @@ public class ServicioIndividual implements EntidadCatalogo{
         return descripcion;
     }
 
-    public double getPrecioBase() {
+    public float getPrecioBase() {
         return precioBase;
     }
 
@@ -78,4 +80,20 @@ public class ServicioIndividual implements EntidadCatalogo{
         return atributos;
     }
 
+    public void reservarCupo(){
+        if(this.cupo > 0){
+            this.cupo -= 1;
+        }
+        else{
+            throw new OperacionInvalidaExcepcion("No hay mas cupos");
+        }
+    }
+
+    public void devolverCupo(){
+        this.cupo += 1;
+    }
+
+    public int getCupo(){
+        return cupo;
+    }
 }

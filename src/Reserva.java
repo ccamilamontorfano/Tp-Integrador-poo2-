@@ -6,9 +6,6 @@ public class Reserva {
     private EstadoReserva estado;
     private List<EntidadCatalogo> items = new ArrayList<>();
     private VoucherDeCredito voucher;
-    private int cantPasajeros;
-    private Direccion direccion;
-    private MetodoTraslado metodoTraslado;
 
     public Reserva(float costoGestion){
         this.costoGestion = costoGestion;
@@ -65,19 +62,5 @@ public class Reserva {
 
     public float getCostoGestion(){
         return costoGestion;
-    }
-
-    public int getCantPasajeros(){
-        return cantPasajeros;
-    }
-
-    public Direccion getDireccion() {
-        return direccion;
-    }
-
-    public float precioFinal(){}
-
-    public void setMetodoTraslado(MetodoTraslado nuevoTraslado){
-        metodoTraslado=nuevoTraslado;
     }
 }
