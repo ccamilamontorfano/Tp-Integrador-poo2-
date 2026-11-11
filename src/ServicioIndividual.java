@@ -49,7 +49,7 @@ public class ServicioIndividual implements EntidadCatalogo{
         return categoria;
     }
 
-    public double precioFinal(){
+    public float getPrecioFinal(){
         return this.getPrecioBase();
     }
 

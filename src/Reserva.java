@@ -6,6 +6,9 @@ public class Reserva {
     private EstadoReserva estado;
     private List<EntidadCatalogo> items = new ArrayList<>();
     private VoucherDeCredito voucher;
+    private int cantPasajeros;
+    private MetodoTraslado metodoTraslado;
+    private Direccion direccion;
 
     public Reserva(float costoGestion){
         this.costoGestion = costoGestion;
@@ -66,5 +69,21 @@ public class Reserva {
 
     public float getCostoServicios(){
         return (float) this.getItems().stream().mapToDouble(item -> item.getPrecioBase()).sum();
+    }
+
+    public float precioFinal(){
+        return 0;
+    }
+
+    public int getCantPasajeros(){
+        return cantPasajeros;
+    }
+
+    public Direccion getDireccion(){
+        return direccion;
+    }
+
+    public void setMetodoTraslado(MetodoTraslado nuevoTraslado){
+        metodoTraslado = nuevoTraslado;
     }
 }

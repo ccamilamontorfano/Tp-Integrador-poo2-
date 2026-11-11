@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PaqueteTuristico implements EntidadCatalogo {
@@ -6,6 +7,9 @@ public class PaqueteTuristico implements EntidadCatalogo {
     private String descripcion;
     private float descuento;
     private List<EntidadCatalogo> items = new ArrayList<>();
+    private int cupos = 10;
+    private Date fechaInicio;
+    private Date fechaFin;
 
     public PaqueteTuristico(String nombre,String descripcion,float descuento,List<EntidadCatalogo> items){
         this.nombre=nombre;
@@ -30,12 +34,12 @@ public class PaqueteTuristico implements EntidadCatalogo {
         return  precioBase;
     }
 
-    public double getDescuento(){
+    public float getDescuento(){
         return descuento;
     }
 
-    public double precioFinal(){
-        double descuento = this.getPrecioBase()*(this.getDescuento()/100.0);
+    public float getPrecioFinal(){
+        float descuento = (this.getPrecioBase()*(this.getDescuento()/100));
         return this.getPrecioBase()- descuento;
     }
 
@@ -52,11 +56,11 @@ public class PaqueteTuristico implements EntidadCatalogo {
     }
 
     public void reservarCupo(){
-        this.getItems().forEach(item -> item.reservarCupo());
+        this.getItems().forEach(EntidadCatalogo::reservarCupo);
     }
 
     public void devolverCupo() {
-        this.getItems().forEach(item -> item.devolverCupo());
+        this.getItems().forEach(EntidadCatalogo::devolverCupo);
     }
 
 }

@@ -6,6 +6,8 @@ public interface EntidadCatalogo {
 
     public float getPrecioBase();
 
+    public float getPrecioFinal();
+
     public void reservarCupo();
 
     public void devolverCupo();
