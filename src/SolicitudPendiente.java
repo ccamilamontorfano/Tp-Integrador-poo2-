@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 public class SolicitudPendiente extends EstadoReserva{
 
     public SolicitudPendiente(){}
@@ -14,8 +16,19 @@ public class SolicitudPendiente extends EstadoReserva{
 
     @Override
     public void confirmar(Reserva reserva){
-        reserva.getItems().forEach(item -> item.reservarCupo());
+        if(!todosTienenCupo(reserva)){
+            throw new SinCupoExcepcion("No se puede confirmar, no hay suficientes cupos");
+        }
+        reservarTodosLosItems(reserva);
         reserva.setEstado(new Confirmada());
+    }
+
+    private void reservarTodosLosItems(Reserva reserva){
+        reserva.getItems().forEach(item -> item.reservarCupo(reserva.getFechaInicio(), reserva.getFechaFin(), reserva.getCantPasajeros()));
+    }
+
+    private boolean todosTienenCupo(Reserva reserva){
+        return reserva.getItems().stream().allMatch(item -> item.tieneCupo(reserva.getFechaInicio(), reserva.getFechaFin(), reserva.getCantPasajeros()));
     }
 
     @Override
