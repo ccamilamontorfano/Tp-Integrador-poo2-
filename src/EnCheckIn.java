@@ -10,7 +10,7 @@ public class EnCheckIn extends EstadoReserva{
     @Override
     public void cancelar(Reserva reserva){
         float montoReembolso = reserva.getCostoServicios() + reserva.getCostoGestion();
-        reserva.getItems().forEach(item -> item.devolverCupo());
+        reserva.devolverCuposAItems();
         reserva.setVoucher(new VoucherDeCredito(montoReembolso));
         reserva.setEstado(new Cancelada());
     }

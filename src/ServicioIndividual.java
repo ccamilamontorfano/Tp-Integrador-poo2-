@@ -1,5 +1,9 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class ServicioIndividual implements EntidadCatalogo{
 
@@ -11,9 +15,10 @@ public class ServicioIndividual implements EntidadCatalogo{
     private float precioBase;
     private String descripcion;
     private List<AtributoDinamico> atributos;
-    private int cupo;
+    private int capacidad;
+    private Map<LocalDate, Integer> ocupado;
 
-    public ServicioIndividual(String nombre,String proveedor,Categoria categoria,float precioBase,String descripcion, int cupo){
+    public ServicioIndividual(String nombre,String proveedor,Categoria categoria,float precioBase,String descripcion, int capacidad){
         ultimoCodigo++;
         this.codigoReserva = ultimoCodigo;
         this.nombre = nombre;
@@ -22,7 +27,8 @@ public class ServicioIndividual implements EntidadCatalogo{
         this.precioBase = precioBase;
         this.descripcion = descripcion;
         this.atributos = new ArrayList<>();
-        this.cupo = cupo;
+        this.capacidad = capacidad;
+        this.ocupado = new HashMap<>();
     }
 
     public String getNombre() {
@@ -80,20 +86,39 @@ public class ServicioIndividual implements EntidadCatalogo{
         return atributos;
     }
 
-    public void reservarCupo(){
-        if(this.cupo > 0){
-            this.cupo -= 1;
+    public void reservarCupo(LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros){
+        if(!tieneCupo(fechaInicio, fechaFin, cantPasajeros)){
+            throw new SinCupoExcepcion("No hay mas capacidad");
         }
-        else{
-            throw new OperacionInvalidaExcepcion("No hay mas cupos");
-        }
+        diasEntre(fechaInicio, fechaFin).forEach(dia -> ocupado.put(dia, this.ocupadosActualizados(dia, cantPasajeros)));
     }
 
-    public void devolverCupo(){
-        this.cupo += 1;
+    private int ocupadosActualizados(LocalDate dia, int cambio){
+        return ocupado.getOrDefault(dia, 0) + cambio;
     }
 
-    public int getCupo(){
-        return cupo;
+    public void devolverCupo(LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros){
+        diasEntre(fechaInicio, fechaFin).forEach(dia -> ocupado.put(dia, this.ocupadosActualizados(dia, - cantPasajeros)));
+    }
+
+
+    public int getCapacidad(){
+        return capacidad;
+    }
+
+    public boolean tieneCupo(LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros){
+        return diasEntre(fechaInicio, fechaFin).allMatch(dia -> hayCapacidad(dia, cantPasajeros));
+    }
+
+    private Stream<LocalDate> diasEntre(LocalDate fechaInicio, LocalDate fechaFin){
+        return fechaInicio.datesUntil(fechaFin.plusDays(1));
+    }
+
+    private boolean hayCapacidad(LocalDate dia, int cantPasajeros){
+        return (this.capacidadSobrante(dia)) >= cantPasajeros;
+    }
+
+    public int capacidadSobrante(LocalDate dia){
+        return capacidad - ocupado.getOrDefault(dia, 0);
     }
 }

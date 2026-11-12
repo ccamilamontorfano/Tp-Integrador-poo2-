@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,10 +10,15 @@ public class Reserva {
     private int cantPasajeros;
     private MetodoTraslado metodoTraslado;
     private Direccion direccion;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 
-    public Reserva(float costoGestion){
+    public Reserva(float costoGestion, LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros){
         this.costoGestion = costoGestion;
         this.estado = new SolicitudPendiente(); // el estado arranca en Solicitud Pendiente
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.cantPasajeros = cantPasajeros;
     }
 
     public void setEstado(EstadoReserva nuevoEstado){
@@ -68,7 +74,7 @@ public class Reserva {
     }
 
     public float getCostoServicios(){
-        return (float) this.getItems().stream().mapToDouble(item -> item.getPrecioBase()).sum();
+        return (float) this.getItems().stream().mapToDouble(item -> item.getPrecioFinal()).sum();
     }
 
     public float precioFinal(){
@@ -85,5 +91,17 @@ public class Reserva {
 
     public void setMetodoTraslado(MetodoTraslado nuevoTraslado){
         metodoTraslado = nuevoTraslado;
+    }
+
+    public LocalDate getFechaInicio(){
+        return fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public void devolverCuposAItems(){
+        this.getItems().forEach(item -> item.devolverCupo(fechaInicio, fechaFin, cantPasajeros));
     }
 }

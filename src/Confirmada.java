@@ -9,7 +9,7 @@ public class Confirmada extends EstadoReserva{
 
     @Override
     public void cancelar(Reserva reserva){
-        reserva.getItems().forEach(item -> item.devolverCupo());
+        reserva.devolverCuposAItems();
         reserva.setEstado(new Cancelada());
     }
 }

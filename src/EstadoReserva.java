@@ -28,3 +28,4 @@ public abstract class EstadoReserva {
         throw new OperacionInvalidaExcepcion("No se puede cancelar la reserva");
     }
 }
+

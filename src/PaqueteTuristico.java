@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,9 +8,6 @@ public class PaqueteTuristico implements EntidadCatalogo {
     private String descripcion;
     private float descuento;
     private List<EntidadCatalogo> items = new ArrayList<>();
-    private int cupos = 10;
-    private Date fechaInicio;
-    private Date fechaFin;
 
     public PaqueteTuristico(String nombre,String descripcion,float descuento,List<EntidadCatalogo> items){
         this.nombre=nombre;
@@ -55,12 +53,15 @@ public class PaqueteTuristico implements EntidadCatalogo {
         items.remove(item);
     }
 
-    public void reservarCupo(){
-        this.getItems().forEach(EntidadCatalogo::reservarCupo);
+    public void reservarCupo(LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros){
+        this.getItems().forEach(item -> item.reservarCupo(fechaInicio, fechaFin, cantPasajeros));
     }
 
-    public void devolverCupo() {
-        this.getItems().forEach(EntidadCatalogo::devolverCupo);
+    public void devolverCupo(LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros) {
+        this.getItems().forEach(item -> item.devolverCupo(fechaInicio, fechaFin, cantPasajeros));
     }
 
+    public boolean tieneCupo(LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros){
+        return this.getItems().stream().allMatch(item -> item.tieneCupo(fechaInicio, fechaFin, cantPasajeros));
+    }
 }
