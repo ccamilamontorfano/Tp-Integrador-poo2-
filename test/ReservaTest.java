@@ -7,8 +7,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class ReservaTest {
     private Reserva reserva;
@@ -18,6 +18,8 @@ public class ReservaTest {
     private EstadoReserva estado;
     private EntidadCatalogo item;
     private List<EntidadCatalogo> items;
+    private EntidadCatalogo itemA;
+    private EntidadCatalogo itemB;
 
     // SETUP
     @BeforeEach
@@ -29,8 +31,12 @@ public class ReservaTest {
         estado = mock(EstadoReserva.class);
         reserva.setEstado(estado);
         item = mock(EntidadCatalogo.class);
+        itemA = mock(EntidadCatalogo.class);
+        itemB = mock(EntidadCatalogo.class);
         items = new ArrayList<>();
     }
+
+
 
     @Test
     public void unaReservaNuevaEstaEnEstadoSolicitudPendiente(){
@@ -67,11 +73,28 @@ public class ReservaTest {
     }
 
     @Test
-    public void laReservaGuardaElCostoDeLosServicios(){
+    public void laReservaCalculaElCostoDeLosServicios(){
+        // SETUP
+        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros);
+        when(itemA.getPrecioFinal()).thenReturn(10000f);
+        when(itemB.getPrecioFinal()).thenReturn(20000f);
+        reservaReal.agregarItem(itemA);
+        reservaReal.agregarItem(itemB);
+        // EXERCISE Y VERIFY
+        assertEquals(30000f, reservaReal.getCostoServicios());
+    }
+
+    @Test
+    public void laReservaDevuelveLosCuposALosItems(){
+        // SETUP
+        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros);
+        reservaReal.agregarItem(itemA);
+        reservaReal.agregarItem(itemB);
         // EXERCISE
-        int cantidadObtenida = reserva.getCantPasajeros();
+        reservaReal.devolverCuposAItems();
         // VERIFY
-        assertEquals(2, cantidadPasajeros);
+        verify(itemA).devolverCupo(inicio, fin, cantidadPasajeros);
+        verify(itemB).devolverCupo(inicio, fin, cantidadPasajeros);
     }
 
 
@@ -82,6 +105,7 @@ public class ReservaTest {
         // VERIFY
         assertEquals(600f, costoTasas);
     }
+
 
     @Test
     public void laReservaGuardaElVoucher(){
