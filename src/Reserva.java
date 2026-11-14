@@ -5,24 +5,34 @@ import java.util.List;
 public class Reserva {
     private float costoGestion;
     private EstadoReserva estado;
+    private EstadoReserva antiguoEstado;
     private List<EntidadCatalogo> items = new ArrayList<>();
-    private VoucherDeCredito voucher;
+    private VoucherDeCredito voucherCredito;
     private int cantPasajeros;
     private MetodoTraslado metodoTraslado;
     private Direccion direccion;
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+    private List<ObserverReserva> observers = new ArrayList<>();
+    private String emailCliente;
+    private ComprobanteFiscal comprobanteFiscal;
+    private Voucher voucher;
 
-    public Reserva(float costoGestion, LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros){
+    public Reserva(float costoGestion, LocalDate fechaInicio, LocalDate fechaFin, int cantPasajeros, MetodoTraslado metodoTraslado,Direccion direccion,String emailCliente){
         this.costoGestion = costoGestion;
         this.estado = new SolicitudPendiente(); // el estado arranca en Solicitud Pendiente
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.cantPasajeros = cantPasajeros;
+        this.metodoTraslado = metodoTraslado;
+        this.direccion=direccion;
+        this.emailCliente = emailCliente;
     }
 
     public void setEstado(EstadoReserva nuevoEstado){
+        antiguoEstado = estado;
         estado = nuevoEstado;
+        this.notificarCambio();
     }
 
     public EstadoReserva getEstado() {
@@ -62,11 +72,11 @@ public class Reserva {
     }
 
     public VoucherDeCredito getVoucher(){
-        return voucher;
+        return voucherCredito;
     }
 
     public void setVoucher(VoucherDeCredito nuevoVoucher){
-        voucher = nuevoVoucher;
+        voucherCredito = nuevoVoucher;
     }
 
     public float getCostoGestion(){
@@ -77,8 +87,8 @@ public class Reserva {
         return (float) this.getItems().stream().mapToDouble(item -> item.getPrecioFinal()).sum();
     }
 
-    public float precioFinal(){
-        return 0;
+    public float valorTotal(){
+        return this.getCostoServicios() + this.getCostoGestion();
     }
 
     public int getCantPasajeros(){
@@ -103,5 +113,28 @@ public class Reserva {
 
     public void devolverCuposAItems(){
         this.getItems().forEach(item -> item.devolverCupo(fechaInicio, fechaFin, cantPasajeros));
+    }
+
+    public void agregarObserver(ObserverReserva nuevoObserver){
+        observers.add(nuevoObserver);
+    }
+
+    public void eliminarObserver(ObserverReserva observer){
+        observers.remove(observer);
+    }
+
+    public void notificarCambio(){
+        for(ObserverReserva observer : observers){
+            observer.cambioEstado(this);
+        }
+    }
+
+    public String getEmailCliente(){
+        return emailCliente;
+    }
+
+    public void generarComprobantes(){
+        this.comprobanteFiscal = new ComprobanteFiscal(this);
+        this.voucher= new Voucher(this);
     }
 }
