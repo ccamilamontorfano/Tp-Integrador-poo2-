@@ -12,6 +12,11 @@ public class EnCheckInTest {
     private EnCheckIn enCheckIn;
     private Reserva reserva;
     private EntidadCatalogo item;
+    private MetodoTraslado traslado;
+    private Direccion direccion;
+    private int cantidadPasajeros;
+    private LocalDate inicio;
+    private LocalDate fin;
 
     // SETUP
     @BeforeEach
@@ -19,6 +24,11 @@ public class EnCheckInTest {
         enCheckIn = new EnCheckIn();
         reserva = mock(Reserva.class);
         item = mock(EntidadCatalogo.class);
+        inicio = LocalDate.of(2026, 2, 8);
+        fin = LocalDate.of(2026, 2, 12);
+        cantidadPasajeros = 2;
+        traslado = mock(MetodoTraslado.class);
+        direccion = mock(Direccion.class);
     }
 
     @Test
@@ -40,13 +50,13 @@ public class EnCheckInTest {
     @Test
     public void alCancelarLaReservaSeGeneraElVoucher() {
         // SETUP
-        Reserva reservaReal = new Reserva(500f, LocalDate.of(2026, 1, 5), LocalDate.of(2026, 1, 10), 3);
+        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros, traslado, direccion, "cami@mail.com");
         when(item.getPrecioFinal()).thenReturn(10000f);
         reservaReal.agregarItem(item);
         // EXERCISE
         enCheckIn.cancelar(reservaReal);
         // VERIFY
-        assertEquals(10500f, reservaReal.getVoucher().getMonto());
+        assertEquals(10600f, reservaReal.getVoucher().getMonto());
     }
 
     @Test

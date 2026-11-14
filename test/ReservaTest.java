@@ -20,6 +20,8 @@ public class ReservaTest {
     private List<EntidadCatalogo> items;
     private EntidadCatalogo itemA;
     private EntidadCatalogo itemB;
+    private MetodoTraslado traslado;
+    private Direccion direccion;
 
     // SETUP
     @BeforeEach
@@ -27,7 +29,9 @@ public class ReservaTest {
         inicio = LocalDate.of(2026, 2, 8);
         fin = LocalDate.of(2026, 2, 12);
         cantidadPasajeros = 2;
-        reserva = new Reserva(600f, inicio, fin, cantidadPasajeros);
+        traslado = mock(MetodoTraslado.class);
+        direccion = mock(Direccion.class);
+        reserva = new Reserva(600f, inicio, fin, cantidadPasajeros, traslado, direccion, "cami@mail.com");
         estado = mock(EstadoReserva.class);
         reserva.setEstado(estado);
         item = mock(EntidadCatalogo.class);
@@ -41,7 +45,7 @@ public class ReservaTest {
     @Test
     public void unaReservaNuevaEstaEnEstadoSolicitudPendiente(){
         // SETUP
-        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros);
+        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros, traslado, direccion, "cami@mail.com");
         // EXERCISE
         EstadoReserva estadoReal = reservaReal.getEstado();
         // VERIFY
@@ -75,7 +79,7 @@ public class ReservaTest {
     @Test
     public void laReservaCalculaElCostoDeLosServicios(){
         // SETUP
-        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros);
+        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros, traslado, direccion, "cami@mail.com");
         when(itemA.getPrecioFinal()).thenReturn(10000f);
         when(itemB.getPrecioFinal()).thenReturn(20000f);
         reservaReal.agregarItem(itemA);
@@ -87,7 +91,7 @@ public class ReservaTest {
     @Test
     public void laReservaDevuelveLosCuposALosItems(){
         // SETUP
-        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros);
+        Reserva reservaReal = new Reserva(600f, inicio, fin, cantidadPasajeros, traslado, direccion, "cami@mail.com");
         reservaReal.agregarItem(itemA);
         reservaReal.agregarItem(itemB);
         // EXERCISE
