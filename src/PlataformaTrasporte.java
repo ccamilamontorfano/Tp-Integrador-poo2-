@@ -1,6 +1,4 @@
 public class PlataformaTrasporte {
 
-    public float estimarTraslado(int pasajeros,Direccion direccion){
-        return 0;
-    }
+    public float estimarTraslado(int pasajeros,Direccion direccion){return 0;}
 }
