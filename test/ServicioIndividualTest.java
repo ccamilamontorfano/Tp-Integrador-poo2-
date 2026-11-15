@@ -4,12 +4,14 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class ServicioIndividualTest {
     private ServicioIndividual servicio;
     private Categoria categoria;
     private LocalDate inicio;
     private LocalDate fin;
+    private AtributoDinamico atributo;
 
     // SETUP
     @BeforeEach
@@ -18,6 +20,105 @@ public class ServicioIndividualTest {
         servicio = new ServicioIndividual("hotel", "camila", categoria, 10000f, "muyComodo", 20);
         inicio = LocalDate.of(2026, 2, 8);
         fin = LocalDate.of(2026, 2, 12);
+        atributo = mock(AtributoDinamico.class);
+    }
+
+
+    @Test
+    public void constructorFuncionaCorectamente() {
+        assertEquals("hotel", servicio.getNombre());
+        assertEquals("camila", servicio.getProveedor());
+        assertEquals(categoria, servicio.getCategoria());
+        assertEquals(10000f, servicio.getPrecioBase());
+        assertEquals("muyComodo", servicio.getDescripcion());
+        assertTrue(servicio.getCodigoReserva() > 0);
+        assertEquals(20, servicio.getCapacidad());
+    }
+
+    @Test
+    public void precioFinalEsIgualAPrecioBase() {
+        assertEquals(10000f, servicio.getPrecioFinal());
+    }
+
+    @Test
+    public void unServicioNuevoNoTieneAtributosDinamicos() {
+        assertTrue(servicio.getAtributos().isEmpty());
+    }
+
+    @Test
+    public void sePuedeAgregarUnAtributoDinamico() {
+        servicio.agregarAtributo(atributo);
+
+        assertEquals(1, servicio.getAtributos().size());
+        assertTrue(servicio.getAtributos().contains(atributo));
+    }
+
+    @Test
+    public void sePuedeEliminarUnAtributoDinamico() {
+        servicio.agregarAtributo(atributo);
+        servicio.eliminarAtributo(atributo);
+
+        assertTrue(servicio.getAtributos().isEmpty());
+    }
+
+    @Test
+    public void unServicioSinAtributosEsValido() {
+        assertTrue(servicio.esServicioValido());
+    }
+
+    @Test
+    public void unServicioConAtributoValidoEsValido() {
+        when(atributo.validar()).thenReturn(true);
+
+        servicio.agregarAtributo(atributo);
+
+        assertTrue(servicio.esServicioValido());
+
+        verify(atributo).validar();
+    }
+
+    @Test
+    public void unServicioConAtributoInvalidoNoEsValido() {
+        when(atributo.validar()).thenReturn(false);
+
+        servicio.agregarAtributo(atributo);
+
+        assertFalse(servicio.esServicioValido());
+
+        verify(atributo).validar();
+    }
+
+    @Test
+    public void unServicioSinNombreNoEsValido() {
+        ServicioIndividual servicioSinNombre =
+                new ServicioIndividual(
+                        null, "sofia", categoria, 10000f,
+                        "muyComodo", 20
+                );
+
+        assertFalse(servicioSinNombre.esServicioValido());
+    }
+
+    @Test
+    public void unServicioConNombreVacioNoEsValido() {
+        ServicioIndividual servicioSinNombre =
+                new ServicioIndividual(
+                        "", "camila", categoria, 10000f,
+                        "muyComodo", 20
+                );
+
+        assertFalse(servicioSinNombre.esServicioValido());
+    }
+
+    @Test
+    public void unServicioConNombreEnBlancoNoEsValido() {
+        ServicioIndividual servicioSinNombre =
+                new ServicioIndividual(
+                        "   ", "camila", categoria, 10000f,
+                        "muyComodo", 20
+                );
+
+        assertFalse(servicioSinNombre.esServicioValido());
     }
 
     @Test
