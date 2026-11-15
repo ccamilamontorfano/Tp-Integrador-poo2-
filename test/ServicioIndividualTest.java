@@ -11,6 +11,7 @@ public class ServicioIndividualTest {
     private LocalDate inicio;
     private LocalDate fin;
 
+    // SETUP
     @BeforeEach
     public void setUp(){
         categoria = new Categoria("alojamiento");
