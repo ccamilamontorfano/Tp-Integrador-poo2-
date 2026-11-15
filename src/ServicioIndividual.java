@@ -64,9 +64,6 @@ public class ServicioIndividual implements EntidadCatalogo{
     }
 
     public boolean esServicioValido(){
-        if(codigoReserva <= 0){
-            return false;
-        }
         if(nombre == null || nombre.isBlank()){
             return false;
         }
