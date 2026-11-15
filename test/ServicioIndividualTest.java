@@ -92,7 +92,7 @@ public class ServicioIndividualTest {
     public void unServicioSinNombreNoEsValido() {
         ServicioIndividual servicioSinNombre =
                 new ServicioIndividual(
-                        null, "sofia", categoria, 10000f,
+                        null, "", categoria, 10000f,
                         "muyComodo", 20
                 );
 
