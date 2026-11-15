@@ -4,6 +4,9 @@ public class PuntoDeEncuentro implements MetodoTraslado{
     private int cuposDeGuias = 10;
     private LocalDate dia;
 
+    public PuntoDeEncuentro(LocalDate dia){
+        this.dia = dia;
+    }
 
     public float calcularCosto(Reserva reserva) {
         return 0;
@@ -20,5 +23,9 @@ public class PuntoDeEncuentro implements MetodoTraslado{
 
     public boolean hayDisponibilidad(){
         return this.hayCupo();
+    }
+
+    public void descontarGuia(){
+        this.cuposDeGuias--;
     }
 }

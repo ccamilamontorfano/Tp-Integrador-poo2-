@@ -73,7 +73,7 @@ public class ReservaTest {
         // EXERCISE
         int cantidadObtenida = reserva.getCantPasajeros();
         // VERIFY
-        assertEquals(2, cantidadPasajeros);
+        assertEquals(2, cantidadObtenida);
     }
 
     @Test
@@ -176,5 +176,42 @@ public class ReservaTest {
         reserva.agregarItem(item);
         // VERIFY
         verify(estado).agregarItem(item, reserva);
+    }
+
+    @Test
+    public void comprobarDireccion() {
+        assertEquals(direccion, reserva.getDireccion());
+    }
+
+    @Test
+    public void calculaElValorTotal() {
+        itemA = mock(EntidadCatalogo.class);
+        itemB = mock(EntidadCatalogo.class);
+
+        when(itemA.getPrecioFinal()).thenReturn(10000f);
+        when(itemB.getPrecioFinal()).thenReturn(20000f);
+
+        reserva.getItems().add(itemA);
+        reserva.getItems().add(itemB);
+
+        assertEquals(30600f, reserva.valorTotal());
+    }
+
+    @Test
+    public void elCostoDeServiciosEsCeroCuandoNoHayItems() {
+        assertEquals(0f, reserva.getCostoServicios());
+    }
+
+    @Test
+    public void elValorTotalEsIgualAlCostoDeGestionCuandoNoHayItems() {
+        assertEquals(600f, reserva.valorTotal());
+    }
+
+    @Test
+    public void sePuedeCambiarElMetodoDeTraslado() {
+        MetodoTraslado nuevoTraslado = mock(MetodoTraslado.class);
+
+        reserva.setMetodoTraslado(nuevoTraslado);
+        assertEquals(nuevoTraslado,reserva.getMetodoTraslado());
     }
 }

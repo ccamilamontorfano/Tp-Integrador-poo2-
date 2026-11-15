@@ -1,5 +1,5 @@
 public class TrasladoVIP {
     public float calcularCosto(float precio){
-        return  0;
+        return  precio;
     }
 }

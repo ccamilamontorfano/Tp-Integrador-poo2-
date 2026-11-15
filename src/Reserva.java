@@ -99,8 +99,15 @@ public class Reserva {
         return direccion;
     }
 
+    public MetodoTraslado getMetodoTraslado(){
+        return metodoTraslado;
+    }
+
     public void setMetodoTraslado(MetodoTraslado nuevoTraslado){
         metodoTraslado = nuevoTraslado;
+        if(nuevoTraslado instanceof PuntoDeEncuentro){
+            ((PuntoDeEncuentro) nuevoTraslado).descontarGuia();
+        }
     }
 
     public LocalDate getFechaInicio(){
