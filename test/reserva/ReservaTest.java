@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import traslado.Direccion;
 import traslado.MetodoTraslado;
+import notificacion.ObserverReserva;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class ReservaTest {
     private EntidadCatalogo itemB;
     private MetodoTraslado traslado;
     private Direccion direccion;
+    private ObserverReserva observer;
+    private ObserverReserva otroObserver;
 
     // SETUP
     @BeforeEach
@@ -43,6 +46,10 @@ public class ReservaTest {
         itemA = mock(EntidadCatalogo.class);
         itemB = mock(EntidadCatalogo.class);
         items = new ArrayList<>();
+        observer = mock(ObserverReserva.class);
+        otroObserver = mock(ObserverReserva.class);
+        reserva.agregarObserver(observer);
+        reserva.agregarObserver(otroObserver);
     }
 
 
@@ -218,5 +225,43 @@ public class ReservaTest {
 
         reserva.setMetodoTraslado(nuevoTraslado);
         assertEquals(nuevoTraslado,reserva.getMetodoTraslado());
+    }
+
+    @Test
+    public void alCambiarDeEstadoSeLeAvisaAlObserver(){
+        // EXERCISE
+        reserva.setEstado(new Confirmada());
+        // VERIFY
+        verify(observer).cambioEstado(reserva);
+    }
+
+    @Test
+    public void alCambiarDeEstadoSeLeAvisaATodosLosObserverQueHayan(){
+        // EXERCISE
+        reserva.setEstado(new Confirmada());
+        // VERIFY
+        verify(observer).cambioEstado(reserva);
+        verify(otroObserver).cambioEstado(reserva);
+    }
+
+    @Test
+    public void unObserverEliminadoNoRecibeAvisos(){
+        // SETUP
+        reserva.eliminarObserver(observer);
+        // EXERCISE
+        reserva.setEstado(new Confirmada());
+        // VERIFY
+        verify(observer, never()).cambioEstado(reserva);
+    }
+
+    @Test
+    public void laReservaGeneraElComprobanteFiscalYElVoucher(){
+        // EXERCISE
+        reserva.generarComprobantes();
+        // VERIFY
+        assertEquals(reserva, reserva.getComprobanteFiscal().getReserva());
+        assertEquals(LocalDate.now(), reserva.getComprobanteFiscal().getFechaEmision());
+        assertEquals(reserva, reserva.getVoucherFactura().getReserva());
+        assertEquals(LocalDate.now(), reserva.getVoucherFactura().getFechaEmision());
     }
 }
