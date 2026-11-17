@@ -154,4 +154,12 @@ public class Reserva {
         this.comprobanteFiscal = new ComprobanteFiscal(this);
         this.voucher= new Voucher(this);
     }
+
+    public ComprobanteFiscal getComprobanteFiscal() {
+        return comprobanteFiscal;
+    }
+
+    public Voucher getVoucherFactura(){
+        return voucher;
+    }
 }

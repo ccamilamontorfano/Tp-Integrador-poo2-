@@ -12,4 +12,12 @@ public class ComprobanteFiscal {
         this.reserva=reserva;
         this.fechaEmision= LocalDate.now();
     }
+
+    public Reserva getReserva(){
+        return reserva;
+    }
+
+    public LocalDate getFechaEmision(){
+        return fechaEmision;
+    }
 }
